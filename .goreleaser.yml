@@ -18,19 +18,8 @@ builds:
       - -s -w -X github.com/certimate-go/certimate.Version={{ .Version }}
     goos:
       - linux
-      - windows
-      - darwin
     goarch:
       - amd64
-      - arm64
-      - arm
-    goarm:
-      - 7
-    ignore:
-      - goos: windows
-        goarch: arm
-      - goos: darwin
-        goarch: arm
 
 # upx:
 #   - enabled: true

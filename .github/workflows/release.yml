@@ -58,9 +58,6 @@ jobs:
         with:
           tool-cache: false
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v4
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
 
@@ -92,7 +89,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile_gh
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          platforms: linux/amd64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -123,18 +120,10 @@ jobs:
         env:
           CGO_ENABLED: 0
           GOOS: linux
+          GOARCH: amd64
         run: |
           mkdir -p dist/linux
-          for ARCH in amd64 arm64 armv7; do
-            if [ "$ARCH" == "armv7" ]; then
-              go env -w GOARCH=arm
-              go env -w GOARM=7
-            else
-              go env -w GOARCH=$ARCH
-              go env -u GOARM
-            fi
-            go build -trimpath -ldflags="-s -w" -o dist/linux/certimate_${GITHUB_REF#refs/tags/}_linux_$ARCH
-          done
+          go build -trimpath -ldflags="-s -w" -o dist/linux/certimate_${GITHUB_REF#refs/tags/}_linux_amd64
 
       - name: Upload Linux binaries
         uses: actions/upload-artifact@v7
@@ -143,89 +132,8 @@ jobs:
           path: dist/linux/
           retention-days: 1
 
-  build-macos:
-    needs: prepare-ui
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-        with:
-          fetch-depth: 1
-          persist-credentials: false
-          submodules: true
-
-      - name: Set up Go
-        uses: actions/setup-go@v6
-        with:
-          go-version-file: "go.mod"
-
-      - name: Download UI build artifacts
-        uses: actions/download-artifact@v8
-        with:
-          name: ui-build
-          path: ./ui/dist
-
-      - name: Build macOS binaries
-        env:
-          CGO_ENABLED: 0
-          GOOS: darwin
-        run: |
-          mkdir -p dist/darwin
-          for ARCH in amd64 arm64; do
-            go env -w GOARCH=$ARCH
-            go build -trimpath -ldflags="-s -w" -o dist/darwin/certimate_${GITHUB_REF#refs/tags/}_darwin_$ARCH
-          done
-
-      - name: Upload macOS binaries
-        uses: actions/upload-artifact@v7
-        with:
-          name: macos-binaries
-          path: dist/darwin/
-          retention-days: 1
-
-  build-windows:
-    needs: prepare-ui
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-        with:
-          fetch-depth: 1
-          persist-credentials: false
-          submodules: true
-
-      - name: Set up Go
-        uses: actions/setup-go@v6
-        with:
-          go-version-file: "go.mod"
-
-      - name: Download UI build artifacts
-        uses: actions/download-artifact@v8
-        with:
-          name: ui-build
-          path: ./ui/dist
-
-      - name: Build Windows binaries
-        env:
-          CGO_ENABLED: 0
-          GOOS: windows
-          GOEXPERIMENT: nodwarf5
-        run: |
-          mkdir -p dist/windows
-          for ARCH in amd64 arm64 386; do
-            go env -w GOARCH=$ARCH
-            go build -trimpath -ldflags="-s -w" -o dist/windows/certimate_${GITHUB_REF#refs/tags/}_windows_$ARCH.exe
-          done
-
-      - name: Upload Windows binaries
-        uses: actions/upload-artifact@v7
-        with:
-          name: windows-binaries
-          path: dist/windows/
-          retention-days: 1
-
   create-release:
-    needs: [build-linux, build-macos, build-windows, publish-image]
+    needs: [build-linux, publish-image]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -245,30 +153,18 @@ jobs:
         run: |
           mkdir -p dist
           cp -r artifacts/linux-binaries/* dist/
-          cp -r artifacts/macos-binaries/* dist/
-          cp -r artifacts/windows-binaries/* dist/
 
-          find dist -type f -not -name "*.exe" -exec chmod +x {} \;
+          find dist -type f -exec chmod +x {} \;
 
           cd dist
           for bin in certimate_*; do
-            if [[ "$bin" == *".exe" ]]; then
-              entrypoint="certimate.exe"
-            else
-              entrypoint="certimate"
-            fi
-
             tmpdir=$(mktemp -d)
-            cp "$bin" "${tmpdir}/${entrypoint}"
+            cp "$bin" "${tmpdir}/certimate"
             cp ../LICENSE "$tmpdir/LICENSE"
             cp ../README.md "$tmpdir/README.md"
             cp ../CHANGELOG.md "$tmpdir/CHANGELOG.md"
 
-            if [[ "$bin" == *".exe" ]]; then
-              zip -j "${bin%.exe}.zip" "$tmpdir"/*
-            else
-              zip -j -X "${bin}.zip" "$tmpdir"/*
-            fi
+            zip -j -X "${bin}.zip" "$tmpdir"/*
 
             rm -rf "$tmpdir"
           done

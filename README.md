@@ -5,7 +5,7 @@
 [![Stars](https://img.shields.io/github/stars/certimate-go/certimate?style=flat)](https://github.com/certimate-go/certimate)
 [![Forks](https://img.shields.io/github/forks/certimate-go/certimate?style=flat)](https://github.com/certimate-go/certimate)
 [![Container Image](https://img.shields.io/badge/GHCR-ghcr.io%2Fyeqingky%2Fcertimate-2496ED?logo=docker&logoColor=white)](https://github.com/Yeqingky/certimate/pkgs/container/certimate)
-[![Release](https://img.shields.io/github/v/release/certimate-go/certimate?style=flat&sort=semver)](https://github.com/certimate-go/certimate/releases)
+[![Release](https://img.shields.io/github/v/release/Yeqingky/certimate?style=flat&sort=semver)](https://github.com/Yeqingky/certimate/releases)
 [![License](https://img.shields.io/github/license/certimate-go/certimate?style=flat)](https://mit-license.org/)
 
 </div>
@@ -62,11 +62,13 @@ An open-source and free self-hosted SSL certificates ACME tool, automates the fu
 <details>
 <summary>👉 Binary Installation: </summary>
 
-Download the archived package of precompiled executable files directly from [GitHub Releases](https://github.com/certimate-go/certimate/releases), extract and then execute:
+Download the Linux amd64 archive from this repository's [GitHub Releases](https://github.com/Yeqingky/certimate/releases), extract and then execute:
 
 ```bash
 ./certimate serve
 ```
+
+> This repository's Release workflow publishes Linux/amd64 binaries only.
 
 </details>
 
@@ -84,7 +86,7 @@ docker run -d \
   ghcr.io/yeqingky/certimate:latest
 ```
 
-> GHCR packages are private by default. After the first publish, change the package visibility to Public to allow anonymous pulls.
+> GHCR packages are private by default. After the first publish, change the package visibility to Public to allow anonymous pulls. The image is available for Linux/amd64 only.
 
 </details>
 

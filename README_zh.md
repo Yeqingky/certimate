@@ -5,7 +5,7 @@
 [![Stars](https://img.shields.io/github/stars/certimate-go/certimate?style=flat)](https://github.com/certimate-go/certimate)
 [![Forks](https://img.shields.io/github/forks/certimate-go/certimate?style=flat)](https://github.com/certimate-go/certimate)
 [![容器镜像](https://img.shields.io/badge/GHCR-ghcr.io%2Fyeqingky%2Fcertimate-2496ED?logo=docker&logoColor=white)](https://github.com/Yeqingky/certimate/pkgs/container/certimate)
-[![Release](https://img.shields.io/github/v/release/certimate-go/certimate?style=flat&sort=semver)](https://github.com/certimate-go/certimate/releases)
+[![Release](https://img.shields.io/github/v/release/Yeqingky/certimate?style=flat&sort=semver)](https://github.com/Yeqingky/certimate/releases)
 [![License](https://img.shields.io/github/license/certimate-go/certimate?style=flat)](https://mit-license.org/)
 
 </div>
@@ -62,11 +62,13 @@
 <details>
 <summary>👉 二进制安装：</summary>
 
-从 [GitHub Releases](https://github.com/certimate-go/certimate/releases) 页面下载预先编译好的可执行文件压缩包，解压缩后在终端中执行：
+从本仓库的 [GitHub Releases](https://github.com/Yeqingky/certimate/releases) 页面下载 Linux amd64 二进制压缩包，解压缩后在终端中执行：
 
 ```bash
 ./certimate serve
 ```
+
+> 本仓库的 Release 工作流仅发布 Linux/amd64 二进制文件。
 
 </details>
 
@@ -84,7 +86,7 @@ docker run -d \
   ghcr.io/yeqingky/certimate:latest
 ```
 
-> GHCR package 首次发布时默认为 Private. 首次推送后, 请将 package 可见性改为 Public, 以允许匿名拉取。
+> GHCR package 首次发布时默认为 Private. 首次推送后, 请将 package 可见性改为 Public, 以允许匿名拉取. 镜像目前仅支持 Linux/amd64.
 
 </details>
 
