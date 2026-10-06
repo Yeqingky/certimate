@@ -1,0 +1,15 @@
+services:
+  certimate:
+    image: certimate:dev
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: certimate-dev
+    ports:
+      - "127.0.0.1:8090:8090"
+    volumes:
+      - /opt/certimate:/app/pb_data
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    restart: unless-stopped
