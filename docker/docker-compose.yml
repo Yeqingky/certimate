@@ -1,7 +1,7 @@
 version: "3.0"
 services:
   certimate:
-    image: certimate/certimate:latest
+    image: ghcr.io/yeqingky/certimate:latest
     container_name: certimate
     ports:
       - 8090:8090

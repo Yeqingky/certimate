@@ -4,7 +4,7 @@
 
 [![Stars](https://img.shields.io/github/stars/certimate-go/certimate?style=flat)](https://github.com/certimate-go/certimate)
 [![Forks](https://img.shields.io/github/forks/certimate-go/certimate?style=flat)](https://github.com/certimate-go/certimate)
-[![Docker Pulls](https://img.shields.io/docker/pulls/certimate/certimate?style=flat)](https://hub.docker.com/r/certimate/certimate)
+[![容器镜像](https://img.shields.io/badge/GHCR-ghcr.io%2Fyeqingky%2Fcertimate-2496ED?logo=docker&logoColor=white)](https://github.com/Yeqingky/certimate/pkgs/container/certimate)
 [![Release](https://img.shields.io/github/v/release/certimate-go/certimate?style=flat&sort=semver)](https://github.com/certimate-go/certimate/releases)
 [![License](https://img.shields.io/github/license/certimate-go/certimate?style=flat)](https://mit-license.org/)
 
@@ -81,8 +81,10 @@ docker run -d \
   -v /etc/localtime:/etc/localtime:ro \
   -v /etc/timezone:/etc/timezone:ro \
   -v $(pwd)/data:/app/pb_data \
-  certimate/certimate:latest
+  ghcr.io/yeqingky/certimate:latest
 ```
+
+> GHCR package 首次发布时默认为 Private. 首次推送后, 请将 package 可见性改为 Public, 以允许匿名拉取。
 
 </details>
 
